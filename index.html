@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Sales Pipeline Calculator: How Many Walkthroughs and Calls You Need</title>
+<meta name="description" content="Free sales pipeline calculator for security guard companies. Set your contract goal and close rates to see how many proposals, walkthroughs, booked appointments, conversations and calls you need each month.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #161634;
+    --night-2: #22224a;
+    --ink: #1b1b2f;
+    --muted: #616180;
+    --line: #e3e3ef;
+    --bg: #ffffff;
+    --soft: #f5f5fb;
+    --indigo: #4f46e5;
+    --indigo-dark: #3730a3;
+    --lime: #b8f24a;
+    --f1: #4f46e5; --f2: #5b54ea; --f3: #6d67ee; --f4: #8984f2; --f5: #a8a4f6; --f6: #c9c7fa;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Inter", -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.6; }
+  h1, h2, h3, .num { font-family: "Space Grotesk", "Inter", sans-serif; }
+  a { color: var(--indigo); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  .narrow { max-width: 760px; }
+
+  .hero { background: var(--night); color: #fff; padding: 0 0 120px; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .brand { color: #fff; text-decoration: none; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+  .brand i { width: 12px; height: 12px; background: var(--lime); border-radius: 3px; display: inline-block; transform: rotate(45deg); }
+  .nav span { font-size: 13px; color: #a7a7d0; }
+  .hero h1 { font-size: 44px; line-height: 1.12; margin: 40px 0 14px; max-width: 18ch; }
+  .hero h1 em { font-style: normal; color: var(--lime); }
+  .hero p { font-size: 18px; color: #c9c9e8; max-width: 62ch; margin: 0; }
+
+  .tool { margin-top: -84px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+  .box { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(22, 22, 52, 0.08); }
+  .box h2 { font-size: 19px; margin: 0 0 4px; }
+  .box .hint { font-size: 13.5px; color: var(--muted); margin: 0 0 18px; }
+  .group { margin-bottom: 20px; }
+  .group-title { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo); margin: 0 0 12px; }
+  .row { margin-bottom: 14px; }
+  .row-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .row label { font-size: 14px; font-weight: 500; }
+  .row output { font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 15px; color: var(--indigo-dark); white-space: nowrap; }
+  .row small { display: block; font-size: 12px; color: var(--muted); line-height: 1.4; }
+  input[type=range] { width: 100%; margin: 6px 0 2px; accent-color: var(--indigo); height: 22px; }
+  .reset { font: inherit; font-size: 13px; color: var(--indigo); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
+
+  .results { position: sticky; top: 16px; }
+  .headline { background: var(--night); color: #fff; border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; }
+  .headline .lbl { font-size: 13px; color: #a7a7d0; }
+  .headline .num { font-size: 40px; font-weight: 700; color: var(--lime); line-height: 1.1; }
+  .headline .sub { font-size: 14px; color: #d4d4ee; }
+
+  .funnel { list-style: none; padding: 0; margin: 0 0 18px; }
+  .funnel li { margin-bottom: 8px; }
+  .fbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; border-radius: 8px; padding: 6px 12px; color: #fff; margin: 0 auto; transition: width 0.25s ease; min-width: 60%; }
+  .fbar .name { font-size: 13.5px; font-weight: 500; }
+  .fbar .num { font-size: 18px; font-weight: 700; }
+  .funnel li:nth-child(n+5) .fbar { color: var(--night); }
+  .conv { text-align: center; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: var(--soft); border-radius: 10px; padding: 10px 12px; }
+  .stat .lbl { font-size: 12px; color: var(--muted); }
+  .stat .num { font-size: 19px; font-weight: 700; }
+  .fine { font-size: 12.5px; color: var(--muted); margin: 14px 0 0; }
+
+  .content { padding: 56px 0 20px; }
+  .content h2 { font-size: 27px; margin: 40px 0 10px; }
+  .content h2:first-child { margin-top: 0; }
+  .content p, .content li { font-size: 16.5px; color: #2b2b44; }
+  .math { background: var(--soft); border-left: 4px solid var(--indigo); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 15px; }
+  .math div { padding: 2px 0; }
+  .levers { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .lever { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .lever h3 { font-size: 17px; margin: 0 0 6px; }
+  .lever p { font-size: 15px; margin: 0; }
+  .cta { background: var(--night); color: #d4d4ee; border-radius: 16px; padding: 28px 30px; margin: 44px 0; }
+  .cta h2 { color: #fff; margin: 0 0 8px !important; }
+  .cta p { color: #d4d4ee; margin: 0; }
+  .cta a { color: var(--lime); font-weight: 600; }
+  dl.faq dt { font-weight: 600; margin-top: 18px; font-size: 16.5px; }
+  dl.faq dd { margin: 4px 0 0; color: var(--muted); }
+  footer { border-top: 1px solid var(--line); margin-top: 40px; padding: 24px 0 40px; text-align: center; font-size: 13px; color: var(--muted); }
+
+  .mbar { display: none; }
+  @media (max-width: 880px) {
+    .tool { grid-template-columns: 1fr; }
+    .results { position: static; }
+    .levers { grid-template-columns: 1fr; }
+    .mbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: var(--night); color: #fff; padding: 10px 16px; justify-content: space-between; align-items: center; font-size: 13px; transition: transform 0.2s ease; }
+    .mbar.hide { transform: translateY(100%); }
+    .mbar b { font-family: "Space Grotesk", sans-serif; font-size: 19px; color: var(--lime); }
+    .mbar a { color: #c9c9e8; font-weight: 600; text-decoration: none; }
+    body { padding-bottom: 56px; }
+  }
+  @media (max-width: 520px) {
+    .nav span { display: none; }
+    .hero h1 { font-size: 32px; margin-top: 26px; }
+    .hero { padding-bottom: 100px; }
+    .box { padding: 18px 16px; }
+    .headline .num { font-size: 34px; }
+    .fbar { min-width: 72%; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="#top"><i aria-hidden="true"></i>Guard Pipeline Math</a>
+      <span>Free tool for security companies</span>
+    </nav>
+    <h1 id="top">Security Sales Pipeline Calculator: <em>work back from the contracts you want</em></h1>
+    <p>Set how many new guard contracts you want each month and how your sales stages convert. The calculator shows how many proposals, walkthroughs, booked appointments, conversations and calls it takes to get there.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap tool">
+    <form class="box" onsubmit="return false">
+      <h2>Your goal and your rates</h2>
+      <p class="hint">Starting values are examples. Replace them with numbers from your own CRM or call logs.</p>
+
+      <div class="group">
+        <p class="group-title">Goal</p>
+        <div class="row">
+          <div class="row-top"><label for="goal">New contracts per month</label><output id="o-goal"></output></div>
+          <input type="range" id="goal" min="1" max="20" step="1" value="2">
+        </div>
+        <div class="row">
+          <div class="row-top"><label for="value">Average monthly billing per contract</label><output id="o-value"></output></div>
+          <input type="range" id="value" min="1000" max="100000" step="500" value="12000">
+        </div>
+        <div class="row">
+          <div class="row-top"><label for="term">Average contract length</label><output id="o-term"></output></div>
+          <input type="range" id="term" min="1" max="60" step="1" value="12">
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Sales stage rates</p>
+        <div class="row">
+          <div class="row-top"><label for="close">Proposals that become signed contracts</label><output id="o-close"></output></div>
+          <input type="range" id="close" min="1" max="100" step="1" value="25">
+        </div>
+        <div class="row">
+          <div class="row-top"><label for="w2p">Walkthroughs that lead to a proposal</label><output id="o-w2p"></output></div>
+          <input type="range" id="w2p" min="1" max="100" step="1" value="80">
+        </div>
+        <div class="row">
+          <div class="row-top"><label for="show">Booked appointments that show up</label><output id="o-show"></output></div>
+          <input type="range" id="show" min="1" max="100" step="1" value="80">
+        </div>
+        <div class="row">
+          <div class="row-top"><label for="c2a">Conversations that book an appointment</label><output id="o-c2a"></output></div>
+          <input type="range" id="c2a" min="1" max="100" step="1" value="10">
+          <small>A conversation means you reached the decision maker.</small>
+        </div>
+        <div class="row">
+          <div class="row-top"><label for="connect">Calls that reach a decision maker</label><output id="o-connect"></output></div>
+          <input type="range" id="connect" min="1" max="60" step="1" value="8">
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Calling capacity</p>
+        <div class="row">
+          <div class="row-top"><label for="dph">Calls made per hour</label><output id="o-dph"></output></div>
+          <input type="range" id="dph" min="5" max="80" step="1" value="30">
+        </div>
+        <div class="row">
+          <div class="row-top"><label for="days">Working days per month</label><output id="o-days"></output></div>
+          <input type="range" id="days" min="10" max="26" step="1" value="21">
+        </div>
+      </div>
+
+      <button type="button" class="reset" id="reset">Reset to example values</button>
+    </form>
+
+    <aside class="box results" id="results" aria-live="polite">
+      <div class="headline">
+        <div class="lbl">Walkthroughs you need each month</div>
+        <div class="num" id="r-walk">0</div>
+        <div class="sub" id="r-walk-sub"></div>
+      </div>
+      <ul class="funnel" id="funnel"></ul>
+      <div class="stats">
+        <div class="stat"><div class="lbl">Calling hours per month</div><div class="num" id="r-hours">0</div></div>
+        <div class="stat"><div class="lbl">Calling hours per day</div><div class="num" id="r-day">0</div></div>
+        <div class="stat"><div class="lbl">New monthly billing added</div><div class="num" id="r-mrr">$0</div></div>
+        <div class="stat"><div class="lbl">Value of one booked appointment</div><div class="num" id="r-appt">$0</div></div>
+      </div>
+      <p class="fine">Value of one booked appointment = total contract value won each month divided by appointments booked. Numbers are rounded up, because you can't book half a meeting.</p>
+    </aside>
+  </div>
+
+  <div class="content">
+    <div class="wrap narrow">
+      <h2>How the math works</h2>
+      <p>Most owners set a revenue goal and then guess at how much selling it takes. This calculator starts at the end of the funnel and divides backward by each stage's rate, so every number above is what the next stage needs.</p>
+      <div class="math">
+        <div>Proposals = contracts / close rate</div>
+        <div>Walkthroughs = proposals / walkthrough to proposal rate</div>
+        <div>Appointments booked = walkthroughs / show rate</div>
+        <div>Conversations = appointments / booking rate</div>
+        <div>Calls = conversations / reach rate</div>
+      </div>
+      <p>Because each stage divides the one after it, a small change early in the funnel moves everything behind it. Try raising the booking rate by a few points and watch the call count drop.</p>
+
+      <h2>Where to look first when the numbers look too big</h2>
+      <div class="levers">
+        <div class="lever"><h3>Reach rate</h3><p>Low reach usually means a bad list. Calling the front desk instead of the property or facility manager burns most of your dials. Fix the list before you add callers.</p></div>
+        <div class="lever"><h3>Booking rate</h3><p>Ask for a short site walkthrough, not a meeting about your company. Open with a reason to call today, like a new project, a new manager or a renewal date.</p></div>
+        <div class="lever"><h3>Show rate</h3><p>Confirm the day before, send the address and the name of who is coming, and book walkthroughs within a week of the call while interest is still fresh.</p></div>
+        <div class="lever"><h3>Close rate</h3><p>Proposals built from a real walkthrough win more often than quotes sent from a phone call. Scope what you saw and price it clearly.</p></div>
+      </div>
+
+      <div class="cta">
+        <h2>Don't have the hours to make these calls?</h2>
+        <p>If the calling hours above don't fit into your week, outbound appointment setting can cover the top of the funnel while your team runs walkthroughs and writes proposals. See how it works for security companies at <a href="https://callingagency.com/lead-generation-services/lead-generation-for-security-companies/" target="_blank" rel="noopener">callingagency.com</a>.</p>
+      </div>
+
+      <h2>Questions</h2>
+      <dl class="faq">
+        <dt>Where do I get my own rates?</dt>
+        <dd>Count the last three to six months in your CRM or spreadsheet: calls made, conversations with decision makers, appointments booked, walkthroughs held, proposals sent and contracts signed. Divide each stage by the one before it.</dd>
+        <dt>What if I don't track calls yet?</dt>
+        <dd>Start with the stages you do know, like proposals and signed contracts, and track calls for the next month. Even rough numbers beat guessing.</dd>
+        <dt>Should short-term contracts count?</dt>
+        <dd>Yes. Set the contract length to the typical term, so a one-month event job and a one-year building contract are valued correctly.</dd>
+        <dt>Why is the headline number walkthroughs, not calls?</dt>
+        <dd>Walkthroughs are where security contracts are won. Once you know how many you need, the rest of the funnel is what it takes to fill your calendar with them.</dd>
+      </dl>
+    </div>
+  </div>
+</main>
+
+<div class="mbar" id="mbar"><span>Walkthroughs needed <b id="m-walk">0</b></span><a href="#results">See funnel</a></div>
+
+<footer>
+  <div class="wrap">Guard Pipeline Math. Free planning tool for security guard companies. Results are estimates based on the rates you enter.</div>
+</footer>
+
+<script>
+(function () {
+  var ids = ['goal','value','term','close','w2p','show','c2a','connect','dph','days'];
+  var fmt = {
+    goal: function (v) { return v + (v == 1 ? ' contract' : ' contracts'); },
+    value: function (v) { return '$' + (+v).toLocaleString('en-US'); },
+    term: function (v) { return v + (v == 1 ? ' month' : ' months'); },
+    dph: function (v) { return v + ' calls'; },
+    days: function (v) { return v + ' days'; }
+  };
+  var defaults = {};
+  ids.forEach(function (id) { defaults[id] = document.getElementById(id).value; });
+  function n(id) { return +document.getElementById(id).value; }
+  function up(x) { return Math.ceil(x - 1e-9); }
+  function money(x) { return '$' + Math.round(x).toLocaleString('en-US'); }
+  var colors = ['var(--f1)','var(--f2)','var(--f3)','var(--f4)','var(--f5)','var(--f6)'];
+
+  function calc() {
+    ids.forEach(function (id) {
+      var v = document.getElementById(id).value;
+      document.getElementById('o-' + id).textContent = fmt[id] ? fmt[id](v) : v + '%';
+    });
+    var goal = n('goal');
+    var proposals = up(goal / (n('close') / 100));
+    var walks = up(proposals / (n('w2p') / 100));
+    var appts = up(walks / (n('show') / 100));
+    var convos = up(appts / (n('c2a') / 100));
+    var calls = up(convos / (n('connect') / 100));
+    var hours = calls / n('dph');
+    var perDay = hours / n('days');
+    var won = goal * n('value') * n('term');
+
+    document.getElementById('r-walk').textContent = walks;
+    document.getElementById('m-walk').textContent = walks;
+    document.getElementById('r-walk-sub').textContent = 'to sign ' + goal + (goal == 1 ? ' new contract' : ' new contracts') + ' a month';
+    document.getElementById('r-hours').textContent = Math.round(hours * 10) / 10;
+    document.getElementById('r-day').textContent = Math.round(perDay * 10) / 10;
+    document.getElementById('r-mrr').textContent = money(goal * n('value'));
+    document.getElementById('r-appt').textContent = money(won / appts);
+
+    var stages = [
+      ['Calls', calls, null],
+      ['Conversations', convos, n('connect')],
+      ['Appointments booked', appts, n('c2a')],
+      ['Walkthroughs held', walks, n('show')],
+      ['Proposals sent', proposals, n('w2p')],
+      ['Contracts signed', goal, n('close')]
+    ];
+    var html = '';
+    stages.forEach(function (s, i) {
+      var width = 100 - i * 7;
+      html += '<li>' + (s[2] !== null ? '<div class="conv">' + s[2] + '% move on</div>' : '') + '<div class="fbar" style="width:' + width + '%;background:' + colors[i] + '"><span class="name">' + s[0] + '</span><span class="num">' + s[1].toLocaleString('en-US') + '</span></div></li>';
+    });
+    document.getElementById('funnel').innerHTML = html;
+  }
+
+  ids.forEach(function (id) { document.getElementById(id).addEventListener('input', calc); });
+  document.getElementById('reset').addEventListener('click', function () {
+    ids.forEach(function (id) { document.getElementById(id).value = defaults[id]; });
+    calc();
+  });
+  calc();
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) {
+      document.getElementById('mbar').classList.toggle('hide', e[0].isIntersecting);
+    }).observe(document.getElementById('results'));
+  }
+})();
+</script>
+</body>
+</html>
